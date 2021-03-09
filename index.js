@@ -1,27 +1,32 @@
-const express = require('express')
-const app = express()
-const port = 5000
+const http = require('http');
+const port = 3000;
 
-app.use(express.static(__dirname + '/paginaweb'));
+console.log('message');
 
-// Estas paginas al mismo nivel / ya no levantan le da preferencia al STATIC
-app.get('/', function (req, res) {
-  res.send('intro GET')
-})
-
-app.post('/', function (req, res) {
-    res.send('intro POST')
-  })
- 
-app.delete('/', function (req, res) {
-    res.send('intro DELETE')
-  })
-
-  // Esta página SI levanta
-  app.get('/home', function (req, res) {
-    res.send('intro HOME')
-  })
+http.createServer((request, response) => {
     
-app.listen(port, () =>{
-    console.log(`Server running in Port ${port}`);
-});
+    //console.log(request);
+    
+    //Enviar un JSON
+    
+    response.writeHead(200, {'Content-Type': 'application/json'});    
+    const user = {
+        id : 9999,
+        name : 'César',
+        lastn : 'Ponte',
+        birth : 'f24/05/72'
+    };
+    response.write(JSON.stringify(user));
+    
+
+    //Enviar un CSV
+    /*
+    response.setHeader('Content-Disposition','attachment; filename=equipos.csv');
+    response.writeHead(200, {'Content-Type': 'application/csv'});
+    response.write('id;name\n1;Sporting Cristal\n2;Univ San Martin\n3;Sport Boys\n4;Deportivo Municipal\n5;UTC');
+    */
+    
+    response.end();
+
+}).listen(port);
+
